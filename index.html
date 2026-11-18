@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Campos de direcciones · Actividad 2.2.2.1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0f1b33;--mut:#6b7690;--line:#e3e8f1;--blue:#1f5fbf;--red:#d62839;--serif:"Cormorant Garamond","Playfair Display","Iowan Old Style",Georgia,serif}
+*{box-sizing:border-box}
+body{margin:0;background:#fbfcfe;color:var(--ink);font:400 16px/1.7 "Lato","Helvetica Neue",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+#bar{position:fixed;top:0;left:0;right:0;height:3px;transform-origin:0 0;transform:scaleX(0);background:linear-gradient(90deg,var(--blue),var(--red));z-index:9}
+header,main{max-width:860px;margin:0 auto;padding:0 28px}
+header{padding-top:84px;padding-bottom:48px}
+header>*{animation:up .9s cubic-bezier(.2,.7,.2,1) both}
+header>:nth-child(2){animation-delay:.1s}
+header>:nth-child(3){animation-delay:.2s}
+header>:nth-child(4){animation-delay:.3s}
+header>:nth-child(5){animation-delay:.4s}
+@keyframes up{from{opacity:0;transform:translateY(16px)}}
+@media(prefers-reduced-motion:reduce){header>*{animation:none}}
+h1,h2,.eq,.lead,.sol i{font-family:var(--serif)}
+h1{font-size:clamp(2.9rem,10vw,5.2rem);font-weight:500;letter-spacing:-.015em;line-height:.98;margin:0 0 16px}
+.lead{font-style:italic;font-size:1.4rem;color:var(--mut);margin:0 0 36px}
+.ficha{display:grid;grid-template-columns:auto 1fr;gap:6px 28px;margin:0 0 40px;font-size:.95rem}
+.ficha dt{color:var(--mut)}
+.ficha dd{margin:0}
+.regla{height:2px;border:0;margin:0 0 8px;background:linear-gradient(90deg,var(--blue),var(--red))}
+.leyenda{display:flex;justify-content:space-between;font-size:.8rem;color:var(--mut)}
+article{padding:56px 0;border-top:1px solid var(--line)}
+article:first-child{border-top:0}
+h2{font-size:1.9rem;font-weight:600;line-height:1.15;margin:0 0 10px}
+p{margin:0 0 12px}
+.eq{font-size:1.75rem;font-style:italic;margin:22px 0 6px}
+.donde,.sol,.obs{font-size:.92rem;color:var(--mut)}
+.sol i{color:var(--ink);font-size:1.2rem}
+.ctl{display:grid;gap:6px;margin:22px 0 16px;max-width:420px}
+.ctl label{display:grid;grid-template-columns:110px 1fr;align-items:center;gap:12px;font-size:.9rem}
+.ctl input{width:100%;accent-color:var(--red)}
+input:focus-visible,button:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
+.btns{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 18px}
+.btns button{font:inherit;font-size:.82rem;color:var(--ink);background:#fff;border:1px solid var(--ink);padding:4px 14px;cursor:pointer;transition:background .15s,color .15s}
+.btns button:hover{background:var(--ink);color:#fff}
+.btns button[aria-pressed=true]{background:linear-gradient(90deg,var(--blue),var(--red));color:#fff;border-color:transparent}
+figure{margin:0}
+figcaption{font-size:.82rem;color:var(--mut);margin-top:8px}
+canvas{display:block;width:100%;background:#fff;border:1px solid var(--line)}
+.a{aspect-ratio:16/9;cursor:crosshair;touch-action:pan-y}
+.b{aspect-ratio:4/3}
+.rd{font-size:.85rem;min-height:3.4em;margin-top:8px;font-variant-numeric:tabular-nums;white-space:pre-wrap}
+.par{display:grid;grid-template-columns:1fr 1fr;gap:32px;margin:32px 0 22px;align-items:start}
+@media(max-width:720px){.par{grid-template-columns:1fr}}
+table{width:100%;border-collapse:collapse;font-size:.88rem;font-variant-numeric:tabular-nums}
+th,td{padding:7px 4px;text-align:right;border-bottom:1px solid var(--line)}
+th{font-weight:700;color:var(--mut)}
+th:first-child,td:first-child{text-align:left}
+tbody tr{cursor:pointer;transition:background .15s}
+tr.on{background:#eef3fb}
+td i{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:8px}
+.obs{margin:0}
+</style>
+</head>
+<body>
+<div id="bar"></div>
+<header>
+  <h1>Campos de direcciones</h1>
+  <p class="lead">Familias de curvas solución de ecuaciones diferenciales.</p>
+  <!-- EDITA AQUÍ tus datos -->
+  <dl class="ficha">
+    <dt>Alumno</dt><dd>Valencia de la Rosa Héctor Uriel</dd>
+    <dt>Universidad</dt><dd>Universidad Politécnica de Atlautla</dd>
+    <dt>Actividad</dt><dd>2.2.2.1</dd>
+    <dt>Fecha</dt><dd>18/11/2026</dd>
+  </dl>
+  <hr class="regla">
+  <div class="leyenda"><span>C menor</span><span>C mayor</span></div>
+</header>
+<main id="main"></main>
+
+<script>
+const $=(s,r=document)=>r.querySelector(s);
+const range=(a,b,s)=>{const r=[];for(let v=a;v<=b+1e-9;v+=s)r.push(+v.toFixed(4));return r};
+const M=[
+{t:'Difusión de calor',
+ d:'Grafica el campo de direcciones del modelo de difusión de calor (Ley de Enfriamiento de Newton) y analiza las soluciones para C desde −2 hasta 2.',
+ eq:'dT/dt = −k (T − T<sub>amb</sub>)',
+ w:'T es la temperatura del cuerpo, T<sub>amb</sub> la temperatura ambiente y k la constante de enfriamiento.',
+ sol:'T(t) = T<sub>amb</sub> + C e<sup>−kt</sup>',
+ cap:'Curvas con C de −2 a 2',xl:'t (min)',yl:'T (°C)',xn:'t',yn:'T',dl:'dT/dt',
+ p:[{k:'k',l:'k',a:.1,b:1.5,s:.05,v:.5},{k:'Ta',l:'T ambiente',a:10,b:30,s:1,v:20}],
+ f:(x,y,p)=>-p.k*(y-p.Ta),dom:p=>[0,10,p.Ta-3,p.Ta+3],ics:p=>range(-2,2,.5).map(c=>p.Ta+c),cv:(y,p)=>y-p.Ta,eq0:p=>p.Ta,
+ o:'Todas las curvas tienden a T = T<sub>amb</sub>. Si C &gt; 0 el cuerpo se enfría desde arriba; si C &lt; 0 se calienta desde abajo. Con k mayor llega más rápido.'},
+{t:'Flujo en tubería horizontal',
+ d:'Representa las líneas de flujo de la velocidad del fluido en una tubería horizontal y explora las soluciones para distintos valores de C.',
+ eq:'dv/dx = −(f / 2D) v |v|',
+ w:'v es la velocidad, f el coeficiente de fricción y D el diámetro de la tubería.',
+ sol:'1/v = (f/2D) x + 1/C &nbsp;(para v &gt; 0)',
+ cap:'Curvas con C = v(0) de −3 a 3',xl:'x (m)',yl:'v (m/s)',xn:'x',yn:'v',dl:'dv/dx',
+ p:[{k:'f',l:'f',a:.01,b:.1,s:.01,v:.02},{k:'D',l:'D',a:.05,b:.5,s:.05,v:.1}],
+ f:(x,y,p)=>-(p.f/(2*p.D))*y*Math.abs(y),dom:p=>[0,10,-3,3],ics:p=>range(-3,3,.5),cv:y=>y,eq0:p=>0,
+ o:'La fricción frena más lo que va más rápido: las curvas decaen como 1/x hacia v = 0. Las de C &gt; 0 y C &lt; 0 son simétricas.'},
+{t:'Movimiento bajo fricción lineal',
+ d:'Grafica el campo de direcciones del movimiento de una partícula con fricción lineal y evalúa las soluciones según distintos valores de C.',
+ eq:'dv/dt = −b v + F',
+ w:'v es la velocidad, b la constante de fricción y F una fuerza constante.',
+ sol:'v(t) = F/b + (C − F/b) e<sup>−bt</sup>',
+ cap:'Curvas con C = v(0) de −2 a 6',xl:'t (s)',yl:'v (m/s)',xn:'t',yn:'v',dl:'dv/dt',
+ p:[{k:'b',l:'b',a:.4,b:2,s:.1,v:.8},{k:'F',l:'F',a:0,b:5,s:.5,v:2}],
+ f:(x,y,p)=>-p.b*y+p.F,dom:p=>[0,8,-2,6],ics:p=>range(-2,6,1),cv:y=>y,eq0:p=>p.F/p.b,
+ o:'Toda velocidad inicial tiende a la velocidad límite v = F/b. Más fricción b baja ese límite y se alcanza antes.'},
+{t:'Crecimiento poblacional logístico',
+ d:'Representa el campo de trayectorias del crecimiento logístico y analiza el comportamiento para C desde 0 hasta 6 millones de personas.',
+ eq:'dN/dt = r N (1 − N / K)',
+ w:'N es la población, r la tasa de crecimiento y K la capacidad máxima.',
+ sol:'N(t) = K / (1 + ((K − C)/C) e<sup>−rt</sup>)',
+ cap:'Curvas con C = N(0) de 0 a 6 millones',xl:'t (años)',yl:'N (millones)',xn:'t',yn:'N',dl:'dN/dt',
+ p:[{k:'r',l:'r',a:.2,b:1.2,s:.1,v:.6},{k:'K',l:'K (millones)',a:2,b:6,s:.5,v:4}],
+ f:(x,y,p)=>p.r*y*(1-y/p.K),dom:p=>[0,12,0,6.5],ics:p=>range(0,6,.5),cv:y=>y,eq0:p=>p.K,
+ o:'Hay dos equilibrios: N = 0 (inestable) y N = K (estable). Si C &lt; K crece en forma de S; si C &gt; K baja hasta K.'}
+];
+
+const mix=t=>{const A=[31,95,191],B=[214,40,57];return 'rgb('+A.map((v,i)=>Math.round(v+(B[i]-v)*t)).join(',')+')'};
+const col=(i,n)=>mix(n>1?i/(n-1):0);
+const dec=d=>d>=1?(Number.isInteger(d)?0:1):2;
+function rk4(f,x0,y0,x1,p,n=240){const h=(x1-x0)/n;let x=x0,y=y0;const o=[[x,y]];
+ for(let i=0;i<n;i++){const a=f(x,y,p),b=f(x+h/2,y+h*a/2,p),c=f(x+h/2,y+h*b/2,p),d=f(x+h,y+h*c,p);y+=h*(a+2*b+2*c+d)/6;x+=h;o.push([x,y])}return o}
+function setup(c,w,h){const d=devicePixelRatio||1;c.width=Math.round(w*d);c.height=Math.round(h*d);const g=c.getContext('2d');g.setTransform(d,0,0,d,0,0);return g}
+function frame(g,w,h,x0,x1,y0,y1,xl,yl){
+ const L=52,R=10,T=10,B=40,pw=w-L-R,ph=h-T-B,X=x=>L+(x-x0)/(x1-x0)*pw,Y=y=>T+ph-(y-y0)/(y1-y0)*ph;
+ g.font='12px Lato,system-ui,sans-serif';g.fillStyle='#6b7690';
+ const dx=(x1-x0)/5,dy=(y1-y0)/5;
+ for(let i=0;i<=5;i++){const x=x0+dx*i,y=y0+dy*i;
+  g.strokeStyle='#e9edf5';g.lineWidth=1;g.beginPath();g.moveTo(X(x),T);g.lineTo(X(x),T+ph);g.moveTo(L,Y(y));g.lineTo(L+pw,Y(y));g.stroke();
+  g.textAlign='center';g.fillText(x.toFixed(dec(dx)),X(x),T+ph+16);
+  g.textAlign='right';g.fillText(y.toFixed(dec(dy)),L-8,Y(y)+4)}
+ g.textAlign='center';g.fillText(xl,L+pw/2,h-6);
+ g.save();g.translate(12,T+ph/2);g.rotate(-Math.PI/2);g.fillText(yl,0,0);g.restore();
+ g.strokeStyle='#0f1b33';g.lineWidth=1;g.beginPath();g.moveTo(L,T);g.lineTo(L,T+ph);g.lineTo(L+pw,T+ph);g.stroke();
+ return{X,Y,iX:px=>x0+(px-L)/pw*(x1-x0),iY:py=>y0+(T+ph-py)/ph*(y1-y0),L,T,pw,ph,kx:pw/(x1-x0),ky:ph/(y1-y0)}
+}
+
+const reduced=matchMedia('(prefers-reduced-motion:reduce)').matches;
+const HINT='Pasa el cursor o toca la gráfica para ver los valores.\nToca para lanzar tu propia curva solución.';
+const INS=[];let raf=0;
+const kick=()=>{if(!raf)raf=requestAnimationFrame(tick)};
+function tick(now){raf=0;let more=false;
+ INS.forEach(I=>{if(!I.vis)return;
+  if(I.rev<1)I.rev=Math.min(1,Math.max(0,(now-I.t0)/1200));
+  if(I.rev<1||I.flow||I.dirty){I.draw(now);I.dirty=false}
+  if(I.rev<1||I.flow)more=true});
+ if(more)kick()}
+
+const io=new IntersectionObserver(es=>es.forEach(en=>{const I=en.target._I;I.vis=en.isIntersecting;
+ if(en.intersectionRatio>=.35&&!I.started){I.started=true;I.t0=performance.now()}
+ I.dirty=true;kick()}),{threshold:[0,.35]});
+
+function mount(m,i){
+ const p=Object.fromEntries(m.p.map(q=>[q.k,q.v]));
+ const I={vis:false,started:reduced,rev:reduced?1:0,t0:0,flow:!reduced,dirty:true,ph:true,hv:null,hl:-1,seeds:[]};
+ const a=document.createElement('article');
+ a.innerHTML='<h2>'+(i+1)+'. '+m.t+'</h2><p>'+m.d+'</p><div class="eq">'+m.eq+'</div><p class="donde">'+m.w+'</p><p class="sol">Solución general: <i>'+m.sol+'</i></p><div class="ctl"></div>'
+ +'<div class="btns"><button class="bf" aria-pressed="'+I.flow+'">Flujo</button><button class="br">Repetir</button><button class="bc">Borrar mis curvas</button></div>'
+ +'<figure><canvas class="a" role="img" aria-label="Campo de direcciones: '+m.t+'"></canvas><div class="rd"></div><figcaption>Campo de direcciones y curvas solución. '+m.cap+'. La línea punteada es el equilibrio; el azul es C menor y el rojo es C mayor. Tus curvas salen en azul marino.</figcaption></figure>'
+ +'<div class="par"><figure><canvas class="b" role="img" aria-label="Línea de fase: '+m.t+'"></canvas><figcaption>Línea de fase: la pendiente según el valor de '+m.yn+'. Los puntos rojos son equilibrios; el punto azul marino sigue tu cursor.</figcaption></figure>'
+ +'<figure><table></table><figcaption>Valores de las soluciones para cada C. Toca una fila para resaltar su curva.</figcaption></figure></div><p class="obs">'+m.o+'</p>';
+ $('#main').appendChild(a);
+ const ca=$('.a',a),cb=$('.b',a),tb=$('table',a),ctl=$('.ctl',a),rd=$('.rd',a);rd.textContent=HINT;
+ const base=document.createElement('canvas'),lay=document.createElement('canvas');
+ let ctx,G,CV=[],CS=[];
+
+ function seedsCalc(){const [x0,x1]=m.dom(p);
+  CS=I.seeds.map(([x,y])=>{const f=rk4(m.f,x,y,x1,p,120),b=rk4(m.f,x,y,x0,p,120).reverse();return{pts:b.concat(f.slice(1)),col:'#0f1b33',seed:[x,y]}})}
+
+ function paint(){
+  const w=ca.clientWidth,h=ca.clientHeight;if(!w)return;
+  ctx=setup(ca,w,h);const gb=setup(base,w,h),gl=setup(lay,w,h);
+  const [x0,x1,y0,y1]=m.dom(p);
+  G=frame(gb,w,h,x0,x1,y0,y1,m.xl,m.yl);
+  const {X,Y,L,T,pw,ph,kx,ky}=G;
+  gb.save();gb.beginPath();gb.rect(L,T,pw,ph);gb.clip();
+  const nx=Math.round(pw/30),ny=Math.round(ph/26);
+  gb.strokeStyle='#c3cbdb';gb.lineWidth=1.2;gb.beginPath();
+  for(let u=0;u<nx;u++)for(let v=0;v<ny;v++){
+   const x=x0+(u+.5)/nx*(x1-x0),y=y0+(v+.5)/ny*(y1-y0),s=m.f(x,y,p),n=Math.hypot(kx,s*ky)||1,ux=kx/n*6,uy=-s*ky/n*6;
+   gb.moveTo(X(x)-ux,Y(y)-uy);gb.lineTo(X(x)+ux,Y(y)+uy)}
+  gb.stroke();
+  const e=m.eq0(p);gb.setLineDash([6,5]);gb.strokeStyle='#0f1b33';gb.lineWidth=1;gb.beginPath();gb.moveTo(L,Y(e));gb.lineTo(L+pw,Y(e));gb.stroke();
+  gb.restore();
+  const ics=m.ics(p);
+  CV=ics.map((c,k)=>({pts:rk4(m.f,x0,c,x1,p),col:col(k,ics.length)}));
+  gl.beginPath();gl.rect(L,T,pw,ph);gl.clip();gl.lineWidth=2.2;
+  CV.forEach(o=>{gl.strokeStyle=o.col;gl.beginPath();o.pts.forEach(([x,y],k)=>k?gl.lineTo(X(x),Y(y)):gl.moveTo(X(x),Y(y)));gl.stroke()});
+  seedsCalc();
+ }
+
+ I.draw=now=>{
+  const w=ca.clientWidth,h=ca.clientHeight,g=ctx;if(!g||!G)return;
+  const {X,Y,L,T,pw,ph,kx,ky}=G,e=1-Math.pow(1-I.rev,3);
+  g.clearRect(0,0,w,h);g.drawImage(base,0,0,w,h);
+  g.save();g.beginPath();g.rect(L,T,pw,ph);g.clip();
+  g.save();g.beginPath();g.rect(L,T,pw*e+1,ph);g.clip();g.drawImage(lay,0,0,w,h);g.restore();
+  const path=pts=>{g.beginPath();pts.forEach(([x,y],k)=>k?g.lineTo(X(x),Y(y)):g.moveTo(X(x),Y(y)))};
+  if(I.hl>=0&&CV[I.hl]){const o=CV[I.hl];path(o.pts);g.strokeStyle='#fff';g.lineWidth=7;g.stroke();g.strokeStyle=o.col;g.lineWidth=3.6;g.stroke()}
+  CS.forEach(o=>{path(o.pts);g.strokeStyle='#fff';g.lineWidth=6;g.stroke();g.strokeStyle='#0f1b33';g.lineWidth=2.6;g.stroke();
+   g.fillStyle='#fff';g.beginPath();g.arc(X(o.seed[0]),Y(o.seed[1]),4.5,0,7);g.fill();g.lineWidth=2;g.stroke()});
+  if(I.flow&&I.rev>=1)CV.concat(CS).forEach((o,k)=>{const u=(now/7000+k*.173)%1,[x,y]=o.pts[Math.floor(u*(o.pts.length-1))];
+   g.fillStyle=o.col;g.strokeStyle='#fff';g.lineWidth=1.6;g.beginPath();g.arc(X(x),Y(y),4,0,7);g.fill();g.stroke()});
+  if(I.hv){const [hx,hy]=I.hv,s=m.f(hx,hy,p),px=X(hx),py=Y(hy),n=Math.hypot(kx,s*ky)||1,ux=kx/n*34,uy=-s*ky/n*34;
+   g.setLineDash([4,4]);g.strokeStyle='#6b7690';g.lineWidth=1;g.beginPath();g.moveTo(px,T);g.lineTo(px,T+ph);g.moveTo(L,py);g.lineTo(L+pw,py);g.stroke();g.setLineDash([]);
+   g.strokeStyle='#fff';g.lineWidth=6;g.beginPath();g.moveTo(px-ux,py-uy);g.lineTo(px+ux,py+uy);g.stroke();
+   g.strokeStyle='#d62839';g.lineWidth=2.6;g.stroke();
+   g.fillStyle='#0f1b33';g.beginPath();g.arc(px,py,4,0,7);g.fill()}
+  g.restore();
+  if(I.ph){phase();I.ph=false}
+ };
+
+ function phase(){
+  const w=cb.clientWidth,h=cb.clientHeight;if(!w)return;
+  const [,,y0,y1]=m.dom(p),N=160,ys=[],fs=[];
+  for(let k=0;k<=N;k++){const y=y0+(y1-y0)*k/N;ys.push(y);fs.push(m.f(0,y,p))}
+  let lo=Math.min(...fs,0),hi=Math.max(...fs,0);const pad=(hi-lo)*.12||1;lo-=pad;hi+=pad;
+  const g=setup(cb,w,h),F=frame(g,w,h,y0,y1,lo,hi,m.yl,m.dl);
+  g.strokeStyle='#999';g.lineWidth=1;g.beginPath();g.moveTo(F.L,F.Y(0));g.lineTo(F.L+F.pw,F.Y(0));g.stroke();
+  g.strokeStyle='#1f5fbf';g.lineWidth=2.2;g.beginPath();ys.forEach((y,k)=>k?g.lineTo(F.X(y),F.Y(fs[k])):g.moveTo(F.X(y),F.Y(fs[k])));g.stroke();
+  g.fillStyle='#d62839';
+  for(let k=0;k<N;k++){let r=null;
+   if(fs[k]===0)r=ys[k];else if(fs[k]*fs[k+1]<0)r=ys[k]-fs[k]*(ys[k+1]-ys[k])/(fs[k+1]-fs[k]);
+   if(r!==null){g.beginPath();g.arc(F.X(r),F.Y(0),4.5,0,7);g.fill()}}
+  if(I.hv&&I.hv[1]>=y0&&I.hv[1]<=y1){const y=I.hv[1],fy=m.f(0,y,p);
+   g.setLineDash([4,4]);g.strokeStyle='#6b7690';g.beginPath();g.moveTo(F.X(y),F.Y(0));g.lineTo(F.X(y),F.Y(fy));g.stroke();g.setLineDash([]);
+   g.fillStyle='#0f1b33';g.beginPath();g.arc(F.X(y),F.Y(fy),5,0,7);g.fill()}
+ }
+
+ function table(){
+  const [x0,x1]=m.dom(p),mid=(x0+x1)/2,ics=m.ics(p),st=Math.ceil(ics.length/7),n=240,hd=x=>m.yn+'('+x+')';
+  let h='<thead><tr><th>C</th><th>'+hd(x0)+'</th><th>'+hd(mid)+'</th><th>'+hd(x1)+'</th></tr></thead><tbody>';
+  ics.forEach((y,k)=>{if(k%st)return;const r=rk4(m.f,x0,y,x1,p,n);
+   h+='<tr data-i="'+k+'"><td><i style="background:'+col(k,ics.length)+'"></i>'+m.cv(y,p).toFixed(1)+'</td><td>'+y.toFixed(2)+'</td><td>'+r[n/2][1].toFixed(2)+'</td><td>'+r[n][1].toFixed(2)+'</td></tr>'});
+  tb.innerHTML=h+'</tbody>';I.hl=-1;
+ }
+ const setHl=k=>{if(I.hl===k)return;I.hl=k;tb.querySelectorAll('tr[data-i]').forEach(r=>r.classList.toggle('on',+r.dataset.i===k));I.dirty=true;kick()};
+ tb.onmouseover=e=>{const r=e.target.closest('tr[data-i]');setHl(r?+r.dataset.i:-1)};
+ tb.onmouseleave=()=>setHl(-1);
+
+ I.refresh=()=>{paint();table();I.ph=true;I.dirty=true;I.draw(0);kick()};
+ const hover=(px,py)=>{if(!G)return;
+  if(px<G.L||px>G.L+G.pw||py<G.T||py>G.T+G.ph){I.hv=null;rd.textContent=HINT}
+  else{const x=G.iX(px),y=G.iY(py);I.hv=[x,y];rd.textContent=m.xn+' = '+x.toFixed(2)+'    '+m.yn+' = '+y.toFixed(2)+'    '+m.dl+' = '+m.f(x,y,p).toFixed(3)+'\n'}
+  I.dirty=I.ph=true;kick()};
+ const pos=e=>{const r=ca.getBoundingClientRect();return[e.clientX-r.left,e.clientY-r.top]};
+ ca.addEventListener('pointermove',e=>hover(...pos(e)));
+ ca.addEventListener('pointerleave',e=>{if(e.pointerType==='mouse'){I.hv=null;rd.textContent=HINT;I.dirty=I.ph=true;kick()}});
+ ca.addEventListener('click',e=>{hover(...pos(e));if(!I.hv)return;I.seeds.push(I.hv.slice());if(I.seeds.length>6)I.seeds.shift();seedsCalc();I.dirty=true;kick()});
+
+ m.p.forEach(q=>{
+  const lb=document.createElement('label'),out=document.createElement('span'),inp=document.createElement('input');
+  inp.type='range';inp.min=q.a;inp.max=q.b;inp.step=q.s;inp.value=q.v;
+  const up=()=>{out.textContent=q.l+' = '+(+p[q.k]).toFixed(q.s<.1?2:1)};up();
+  inp.oninput=()=>{p[q.k]=+inp.value;up();I.rev=1;I.refresh()};
+  lb.append(out,inp);ctl.appendChild(lb)});
+ $('.bf',a).onclick=e=>{I.flow=!I.flow;e.target.setAttribute('aria-pressed',I.flow);I.dirty=true;kick()};
+ $('.br',a).onclick=()=>{I.rev=reduced?1:0;I.t0=performance.now();I.started=true;I.dirty=true;kick()};
+ $('.bc',a).onclick=()=>{I.seeds=[];seedsCalc();I.dirty=true;kick()};
+
+ ca._I=I;io.observe(ca);INS.push(I);I.refresh();
+}
+
+M.forEach(mount);
+const bar=$('#bar'),sc=()=>{const d=document.documentElement;bar.style.transform='scaleX('+(scrollY/Math.max(1,d.scrollHeight-innerHeight))+')'};
+addEventListener('scroll',sc,{passive:true});sc();
+let lw=innerWidth,tm;
+addEventListener('resize',()=>{if(innerWidth===lw)return;lw=innerWidth;clearTimeout(tm);tm=setTimeout(()=>INS.forEach(I=>I.refresh()),120)});
+if(document.fonts)document.fonts.ready.then(()=>INS.forEach(I=>I.refresh()));
+</script>
+</body>
+</html>
